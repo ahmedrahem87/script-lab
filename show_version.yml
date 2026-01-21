@@ -1,0 +1,11 @@
+---
+- name: Test IOS-XRv connectivity
+  hosts: all
+  gather_facts: no
+  connection: network_cli
+  vars:
+    ansible_network_os: iosxr
+  tasks:
+    - name: Run show version
+      ansible.netcommon.cli_command:
+        command: show version
