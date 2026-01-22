@@ -6,6 +6,9 @@
 
   vars:
     ansible_network_os: cisco.iosxr.iosxr
+    ansible_ssh_common_args: >
+      -o PreferredAuthentications=password
+      -o PubkeyAuthentication=no
 
   tasks:
     - name: Run show version
