@@ -15,3 +15,6 @@
       ansible.netcommon.cli_command:
         command: show version
 
+    - name: Show command output
+      debug:
+        var: show_ver.stdout
