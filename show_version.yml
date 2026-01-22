@@ -1,11 +1,10 @@
 ---
-- name: Test IOS-XRv connectivity
+- name: Test IOS-XRv connectivity (NETCONF)
   hosts: all
   gather_facts: no
-  connection: network_cli
+  connection: netconf
   vars:
-    ansible_network_os: iosxr
+    ansible_network_os: cisco.iosxr.iosxr
   tasks:
-    - name: Run show version
-      ansible.netcommon.cli_command:
-        command: show version
+    - name: Get IOS-XR facts
+      cisco.iosxr.iosxr_facts:
