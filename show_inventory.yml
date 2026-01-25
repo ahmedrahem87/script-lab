@@ -1,0 +1,25 @@
+---
+- name: Test IOS-XR connectivity (network_cli)
+  hosts: all
+  gather_facts: no
+  connection: network_cli
+
+  vars:
+    ansible_network_os: cisco.iosxr.iosxr
+    # Assuming AWX credentials are used for auth, if not add KexAlgorithms line back here
+    # ansible_ssh_common_args: >
+    #   -o KexAlgorithms=+diffie-hellman-group14-sha1
+
+  tasks:
+    - name: Run show inventory
+      ansible.netcommon.cli_command:
+        command: show inventory
+      register: router_output  # <-- ***THIS IS THE KEY CHANGE***
+
+    - name: Print the captured command output
+      ansible.builtin.debug:
+        # The output content is in the 'stdout_lines' or 'stdout' attribute of the registered variable
+        var: router_output.stdout_lines 
+        # Alternatively, use 'msg' to format it nicely:
+        # msg: "{{ router_output.stdout }}"
+
