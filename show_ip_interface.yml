@@ -16,5 +16,15 @@
     - name: Print the captured command output
       ansible.builtin.debug:
         var: router_output.stdout_lines 
-  
+
+
+    - name: Check if any interface is Down
+      ansible.builtin.fail:
+        msg: "One or more interfaces are DOWN on {{ inventory_hostname }}"
+      when: >
+        router_output.stdout_lines
+        | select('search', '\sDown\s+Down')
+        | list
+        | length > 0
+ 
 
