@@ -1,0 +1,25 @@
+---
+- name: Test IOS connectivity (network_cli)
+  hosts: all
+  gather_facts: no
+  connection: network_cli
+
+  vars:
+    # 1. FIXED: Changed from iosxr to ios
+    ansible_network_os: cisco.ios.ios
+    
+    # 2. FIXED: Added the specific Kex and Ciphers required for vIOS 15.9
+    ansible_ssh_common_args: >
+      -o KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1
+      -o HostKeyAlgorithms=+ssh-rsa
+      -o PubkeyAcceptedAlgorithms=+ssh-rsa
+
+  tasks:
+    - name: Run show version and capture output
+      ansible.netcommon.cli_command:
+        command: show version
+      register: router_output
+
+    - name: Print the captured command output
+      ansible.builtin.debug:
+        var: router_output.stdout_lines
