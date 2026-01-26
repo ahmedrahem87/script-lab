@@ -13,3 +13,8 @@
       ansible.netcommon.cli_config:
         config: "{{ lookup('file', config_file) }}"
 
+    - name: Audit Hostname Change (Check Mode Only)
+      cisco.iosxr.iosxr_config:  # FIXED: Changed from cisco.ios to cisco.iosxr
+        lines:
+          - hostname Test-iosxr
+      check_mode: true           # FIXED: Corrected indentation
