@@ -11,6 +11,9 @@
   tasks:
     - name: Load config with 5-minute rollback timer
       ansible.netcommon.netconf_config:
-        src: "{{ config_file }}"
-        state: present
-        confirm: 5  # Router will rollback in 5 mins unless Step 2 runs
+        # FIXED: Changed 'src' to 'content' and wrapped in lookup
+        content: "{{ lookup('file', config_file) }}"
+        # FIXED: Removed 'state: present' (not supported by this module)
+        # FIXED: Added 'format: text' to tell the router this is CLI-style text
+        format: text
+        confirm: 5
