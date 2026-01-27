@@ -1,0 +1,16 @@
+---
+- name: Test NETCONF Connectivity
+  hosts: all
+  gather_facts: no
+  connection: ansible.netcommon.netconf # Tells Ansible to use the NETCONF plugin
+
+  tasks:
+    - name: Get Device Capabilities via NETCONF
+      ansible.netcommon.netconf_get:
+        source: running
+        filter: <system xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-shellutils-oper"/>
+      register: result
+
+    - name: Show the output
+      debug:
+        var: result.stdout
