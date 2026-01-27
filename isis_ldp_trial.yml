@@ -1,0 +1,21 @@
+---
+- name: "STEP 1: Trial Configuration (Staging)"
+  hosts: all
+  gather_facts: no
+  connection: ansible.netcommon.netconf
+
+  vars:
+    config_path: "configs/iosxr/isis_ldp.cfg"
+
+  tasks:
+    - name: Push ISIS/LDP config with 5-minute rollback timer
+      ansible.netcommon.netconf_config:
+        content: "{{ lookup('file', config_path) }}"
+        format: text
+        # The 'confirm' parameter starts the rollback timer (in minutes)
+        confirm: 5 
+      register: trial_output
+
+    - name: Report Staging Status
+      debug:
+        msg: "Config applied! You have 5 minutes to verify before automatic rollback."

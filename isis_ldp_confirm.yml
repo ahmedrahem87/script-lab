@@ -1,0 +1,16 @@
+---
+- name: "STEP 2: Confirm and Persist Configuration"
+  hosts: all
+  gather_facts: no
+  connection: ansible.netcommon.netconf
+
+  tasks:
+    - name: Confirm the pending transaction
+      ansible.netcommon.netconf_config:
+        # Sending a commit without new content confirms the 'trial'
+        confirm: 0 
+      register: confirm_output
+
+    - name: Final Success Message
+      debug:
+        msg: "Configuration permanently committed."
