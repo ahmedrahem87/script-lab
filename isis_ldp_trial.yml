@@ -9,7 +9,7 @@
 
   tasks:
     - name: Push ISIS/LDP config with 5-minute rollback timer
-      ansible.netcommon.netconf_config:
+      cisco.iosxr.iosxr_netconf_config:
         content: "{{ lookup('file', config_path) }}"
         format: text
         # The 'confirm' parameter starts the rollback timer (in minutes)
