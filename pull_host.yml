@@ -1,0 +1,19 @@
+---
+- name: Pull Data from NetBox API
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Fetch specific device data
+      ansible.builtin.uri:
+        url: "http://192.168.127.149:8000/api/dcim/devices/2/"
+        method: GET
+        headers:
+          Authorization: "37429c9ca5c74ec0af0eeac134ea470905d09555"
+          Content-Type: "application/json"
+        status_code: 200
+      register: netbox_device
+
+    - name: Display device information
+      ansible.builtin.debug:
+        msg: "Device name is {{ netbox_device.json.display }}"
+
