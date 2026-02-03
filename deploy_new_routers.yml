@@ -22,14 +22,19 @@
         status_code: 200
       register: netbox_config
 
-    - name: Save Rendered Config to Local File (Check Step)
-      copy:
-        content: "{{ netbox_config.json.content }}"
-        dest: "/tmp/{{ inventory_hostname }}_intended.txt"
-      delegate_to: localhost
 
-    - name: Push Configuration to GNS3 Router
-      cisco.ios.ios_config:
-        lines: "{{ netbox_config.json.content.split('\n') }}"
-        save_when: changed
-      register: output
+    - name: Display Rendered Config
+      debug:
+        msg: "{{ netbox_config.json.content }}"
+
+      # - name: Save Rendered Config to Local File (Check Step)
+      # copy:
+      #  content: "{{ netbox_config.json.content }}"
+      #  dest: "/tmp/{{ inventory_hostname }}_intended.txt"
+      #delegate_to: localhost
+
+      # - name: Push Configuration to GNS3 Router
+      # cisco.ios.ios_config:
+      #  lines: "{{ netbox_config.json.content.split('\n') }}"
+      #  save_when: changed
+      # register: output
