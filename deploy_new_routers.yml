@@ -5,29 +5,28 @@
   gather_facts: false
 
   tasks:
+    - name: Debug Variable Check
+      debug:
+        msg: "Targeting Device Name: {{ inventory_hostname }} with ID: {{ netbox_id }}"
+
     - name: Fetch Rendered Config from NetBox
       uri:
-        url: "http://192.168.127.149:8000/api/dcim/devices/{{ id }}/render-config/"
+        # Changed {{ id }} to {{ netbox_id }}
+        url: "http://192.168.127.149:8000/api/dcim/devices/{{ netbox_id }}/render-config/"
         method: POST
         headers:
           Authorization: "Token 37429c9ca5c74ec0af0eeac134ea470905d09555"
         status_code: 200
       register: netbox_config
 
-    # --- NEW TASK START ---
-    - name: Save Rendered Config to Local File (Check Step)
+    - name: Save Rendered Config to Local File
       copy:
         content: "{{ netbox_config.json.content }}"
         dest: "/tmp/{{ inventory_hostname }}_intended.txt"
       delegate_to: localhost
-    # --- NEW TASK END ---
 
     - name: Push Configuration to GNS3 Router
       cisco.ios.ios_config:
         lines: "{{ netbox_config.json.content.split('\n') }}"
         save_when: changed
       register: output
-
-    - name: Show Changes
-      debug:
-        msg: "{{ output.updates }}"
