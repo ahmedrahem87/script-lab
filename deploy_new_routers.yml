@@ -1,0 +1,25 @@
+---
+- name: Deploy Intended Config to New Routers
+  hosts: all
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: Fetch Rendered Config from NetBox
+      uri:
+        url: "http://192.168.127.149:8000/api/dcim/devices/{{ id }}/render-config/"
+        method: POST
+        headers:
+          Authorization: "Token {{ netbox_token }}"
+        status_code: 200
+      register: netbox_config
+
+    - name: Push Configuration to GNS3 Router
+      cisco.ios.ios_config:
+        lines: "{{ netbox_config.json.content.split('\n') }}"
+        save_when: changed
+      register: output
+
+    - name: Show Changes
+      debug:
+        msg: "{{ output.updates }}"
