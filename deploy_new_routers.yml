@@ -35,6 +35,6 @@
 
     - name: Push Configuration to GNS3 Router
       cisco.ios.ios_config:
-        config: "{{ netbox_config.json.content.split('\n') }}"
+        config: "{{ netbox_config.json.content }}"
         save_when: changed
       register: output
