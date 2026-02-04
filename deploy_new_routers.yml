@@ -33,9 +33,9 @@
       #  dest: "/tmp/{{ inventory_hostname }}_intended.txt"
       #delegate_to: localhost
 
-    - name: Push Configuration to GNS3 Router Day-0
+    - name: Push Configuration to GNS3 Router (Day-0)
       cisco.ios.ios_config:
-        config: "{{ netbox_config.json.content }}"
+        lines: "{{ netbox_config.json.content.splitlines() }}"
         match: none
         save_when: changed
-      register: output
+
