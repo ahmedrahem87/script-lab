@@ -1,0 +1,26 @@
+- name: Day-0 Provisioning via NETCONF
+  hosts: all
+  gather_facts: false
+
+  vars:
+    ansible_connection: netconf
+    ansible_network_os: cisco.ios.ios
+    ansible_port: 830
+
+  tasks:
+    - name: Fetch NETCONF config from NetBox
+      uri:
+        url: "http://192.168.127.149:8000/api/dcim/devices/{{ netbox_id }}/render-config/"
+        method: POST
+        headers:
+          Authorization: "Token 37429c9ca5c74ec0af0eeac134ea470905d09555"
+        status_code: 200
+      register: netbox_cfg
+
+    - name: Push NETCONF config
+      ansible.netcommon.netconf_config:
+        content: "{{ netbox_cfg.json.content }}"
+        datastore: running
+        lock: yes
+        validate: yes
+
