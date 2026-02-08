@@ -20,7 +20,8 @@
     - name: Push NETCONF config
       ansible.netcommon.netconf_config:
         content: "{{ netbox_cfg.json.content }}"
-        datastore: running
+        datastore: candidate
         lock: if-supported
         validate: yes
+        commit: yes
 
