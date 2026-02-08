@@ -21,6 +21,6 @@
       ansible.netcommon.netconf_config:
         content: "{{ netbox_cfg.json.content }}"
         datastore: running
-        lock: yes
+        lock: if-supported
         validate: yes
 
