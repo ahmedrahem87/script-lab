@@ -19,7 +19,8 @@
 
     - name: Push NETCONF config
       ansible.netcommon.netconf_config:
-        content: "{{ netbox_cfg.json.content }}"
+        #content: "{{ netbox_cfg.json.content }}"
+        content: "{{ lookup('template', 'iosxe_day0.xml.j2') }}"
         datastore: candidate
         lock: if-supported
         validate: yes
